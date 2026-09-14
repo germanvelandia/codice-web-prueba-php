@@ -1,7 +1,7 @@
 name: Compilar CÓDICE para cPanel
 
 on:
-  workflow_dispatch:  # Permite ejecutarlo a mano, con un botón
+  workflow_dispatch:
 
 jobs:
   build:
@@ -18,8 +18,8 @@ jobs:
       - name: Instalar dependencias
         run: npm install
 
-      - name: Compilar (para la subcarpeta /codice/)
-        run: npm run build -- --base=/codice/
+      - name: Compilar (para la subcarpeta /codice/, SIN comprimir — para poder leer errores)
+        run: npm run build -- --base=/codice/ --minify=false --sourcemap
 
       - name: Empaquetar el resultado
         run: cd dist && zip -r ../codice-compilado.zip .
