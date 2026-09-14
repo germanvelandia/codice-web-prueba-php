@@ -316,6 +316,18 @@ export async function fetchActasPorEstudiante(estudianteId) { return llamarAPI(`
 /* ==================== DIPLOMAS ==================== */
 export async function fetchMiPerfil() { return llamarAPI("mi_perfil_get.php"); }
 export async function guardarMiNombre(nombre) { return post("mi_nombre_guardar.php", { nombre }); }
+
+/* ==================== INICIO (dashboard del docente) ==================== */
+export async function fetchValorSemanal() { return llamarAPI("valor_semanal_get.php"); }
+export async function guardarValorSemanal(campos) { return post("valor_semanal_guardar.php", campos); }
+export async function fetchEntradasCodiceSinRevisar() { return llamarAPI("entradas_codice_sin_revisar.php"); }
+export async function marcarCodiceRevisado(id) { return post("codice_marcar_revisado.php", { id }); }
+export async function calificarEntradaCodice(entrada, estudianteId, gradoId, valor, categoriaId, periodo) {
+  return post("entrada_codice_calificar.php", { entrada_id: entrada.id, estudiante_id: estudianteId, grado_id: gradoId, valor, categoria_id: categoriaId, periodo, materia_id: entrada.materia_id });
+}
+export async function fetchStatsDocente() { return llamarAPI("stats_docente_get.php"); }
+export async function fetchResumenDocente() { return llamarAPI("resumen_docente_get.php"); }
+export async function fetchClasesPendientesDeHoy(pares) { return post("clases_pendientes_de_hoy.php", { pares }); }
 export async function fetchAsignaturasDiploma() { return llamarAPI("asignaturas_diploma_list.php"); }
 export async function crearAsignaturaDiploma(nombre, pilares) { return post("asignatura_diploma_crear.php", { nombre, pilares }); }
 export async function eliminarAsignaturaDiploma(id) { return post("asignatura_diploma_eliminar.php", { id }); }
