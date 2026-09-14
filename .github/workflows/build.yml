@@ -1,0 +1,31 @@
+name: Compilar CÓDICE para cPanel
+
+on:
+  workflow_dispatch:  # Permite ejecutarlo a mano, con un botón
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Compilar (para la subcarpeta /codice/)
+        run: npm run build -- --base=/codice/
+
+      - name: Empaquetar el resultado
+        run: cd dist && zip -r ../codice-compilado.zip .
+
+      - name: Dejarlo disponible para descargar
+        uses: actions/upload-artifact@v4
+        with:
+          name: codice-compilado
+          path: codice-compilado.zip
