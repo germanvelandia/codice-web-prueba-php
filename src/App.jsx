@@ -2374,7 +2374,7 @@ function Panel({ session }) {
   const cargarInstitucion = () => api.fetchInstitucion().then(setInstitucion);
 
   useEffect(() => {
-    api.asegurarProfesor().then(() => api.asegurarGradosBase()).then(() => api.fetchGrados()).then((data) => {
+    api.fetchGrados().then((data) => {
       setGrados(data);
       setGradoActivo((prev) => prev || data[0]?.id || null);
     });
