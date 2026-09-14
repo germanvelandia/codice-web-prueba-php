@@ -56,12 +56,14 @@ export default function App() {
 
   useEffect(() => {
     if (soloEstudiante) return;
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
+    api.whoamiProfesor().then((yo) => {
+      setSession(yo.logueado ? yo : null);
       setLoading(false);
     });
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, s) => setSession(s));
-    return () => listener.subscription.unsubscribe();
+    // NOTA: la versión de Supabase tenía acá un "listener" que detectaba
+    // cambios de sesión en tiempo real (por ejemplo, si se cerraba sesión
+    // en otra pestaña). PHP no tiene un equivalente directo a eso — cada
+    // pestaña revisa su propia sesión al cargar, nada más.
   }, []);
 
   if (soloEstudiante) {
@@ -2051,18 +2053,19 @@ function LoginScreen() {
 
   const entrar = async () => {
     setCargando(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    try {
+      await api.loginProfesor(email, password);
+      window.location.reload(); // recarga para que App.jsx vuelva a revisar la sesión y muestre el Panel
+    } catch (e) {
+      setMensaje(e.message);
+    }
     setCargando(false);
-    if (error) setMensaje(error.message);
   };
 
-  const recuperar = async () => {
-    if (!email) { setMensaje("Escribe tu correo arriba primero."); return; }
-    setCargando(true);
-    const { error } = await supabase.auth.resetPasswordForEmail(email);
-    setCargando(false);
-    setMensaje(error ? error.message : "Te enviamos un correo para restablecer tu contraseña.");
-  };
+  // PENDIENTE: "Olvidé mi contraseña" todavía no está migrado — necesita un
+  // endpoint PHP que envíe el correo con un token temporal (parecido a como
+  // se hizo para Empresa/Supervisor en Campoalto). Por ahora, si un docente
+  // olvida su contraseña, hay que cambiarla a mano en la base de datos.
 
   return (
     <div className="bg-white rounded-2xl shadow-lg p-6">
@@ -2080,7 +2083,6 @@ function LoginScreen() {
         {cargando ? "Un momento…" : "Entrar"}
       </button>
 
-      <button onClick={recuperar} className="w-full text-xs text-violet-500 mt-3">¿Olvidaste tu contraseña?</button>
       <p className="text-[11px] text-slate-400 text-center mt-4">
         ¿Sos docente nuevo y no tenés cuenta? Pedile a un administrador de la plataforma que te invite.
       </p>
@@ -2400,9 +2402,9 @@ function Panel({ session }) {
   return (
     <div className="min-h-screen relative">
       <FondoArcadeDocente />
-      <SidebarPanel activo={tab} onCambiar={irA} email={session.user.email} institucion={institucion}
+      <SidebarPanel activo={tab} onCambiar={irA} email={session.email} institucion={institucion}
         onAdmin={() => setAdministracionAbierta(true)} onInstitucion={() => setInstitucionAbierta(true)}
-        onSalir={() => supabase.auth.signOut()} onBuscarEstudiante={irACalificacionesDesdeBusqueda}
+        onSalir={() => api.logoutProfesor().then(() => window.location.reload())} onBuscarEstudiante={irACalificacionesDesdeBusqueda}
         grados={grados} gradoActivo={gradoActivo} onCambiarGradoActivo={setGradoActivo}
         periodoActivo={periodoActivo} onCambiarPeriodoActivo={setPeriodoActivo}
         materias={materias} materiaActiva={materiaActiva} onCambiarMateriaActiva={setMateriaActiva} />
