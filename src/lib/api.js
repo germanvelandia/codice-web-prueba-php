@@ -253,15 +253,122 @@ export async function fetchCoronasEstudiante(estudianteId) { return llamarAPI(`c
 export async function fetchPreguntaTriviaAleatoria(categoriaId, estudianteId) { return llamarAPI(`pregunta_trivia_aleatoria.php?categoria_id=${categoriaId}&estudiante_id=${estudianteId}`); }
 export async function responderTrivia(estudianteId, pregunta, opcionIdx) { return post("responder_trivia.php", { estudiante_id: estudianteId, pregunta_id: pregunta.id, opcion_idx: opcionIdx }); }
 
+/* ==================== PERSONAJE / AVATAR ==================== */
+export async function fetchAvatarCatalogo() { return llamarAPI("avatar_catalogo_list.php"); }
+export async function fetchAvatarConfig(estudianteId) { return llamarAPI(`avatar_config_get.php?estudiante_id=${estudianteId}`); }
+export async function guardarAvatarConfig(estudianteId, campos) { return post("avatar_config_guardar.php", { estudiante_id: estudianteId, ...campos }); }
+export async function fetchAvatarDesbloqueados(estudianteId) { return llamarAPI(`avatar_desbloqueados_list.php?estudiante_id=${estudianteId}`); }
+export async function comprarParteAvatar(estudianteId, parteId, costo, monedasActuales) { return post("avatar_parte_comprar.php", { estudiante_id: estudianteId, parte_id: parteId, costo, monedas_actuales: monedasActuales }); }
+
+/* ==================== LOGROS ==================== */
+export async function fetchLogrosCatalogo() { return llamarAPI("logros_catalogo_list.php"); }
+export async function fetchLogrosEstudiante(estudianteId) { return llamarAPI(`logros_estudiante_list.php?estudiante_id=${estudianteId}`); }
+export async function crearLogro(campos) { return post("logro_crear.php", campos); }
+export async function editarLogro(id, campos) { return post("logro_editar.php", { id, ...campos }); }
+export async function eliminarLogro(id) { return post("logro_eliminar.php", { id }); }
+export async function verificarYOtorgarLogros(estudianteId) { return post("verificar_y_otorgar_logros.php", { estudiante_id: estudianteId }); }
+export async function fetchLogrosDuplicados() { return llamarAPI("logros_duplicados.php"); }
+export async function fusionarLogrosDuplicados(idConservar, idsEliminar) { return post("logros_fusionar.php", { id_conservar: idConservar, ids_eliminar: idsEliminar }); }
+export async function limpiarTodosLosDuplicadosLogros() { return post("logros_limpiar_todos_duplicados.php", {}); }
+
+/* ==================== ÁLBUM DE CRIATURAS ==================== */
+export async function fetchCriaturas() { return llamarAPI("criaturas_list.php"); }
+export async function fetchCriaturasActivas() { return llamarAPI("criaturas_activas_list.php"); }
+export async function crearCriatura(campos) { return post("criatura_crear.php", campos); }
+export async function editarCriatura(id, campos) { return post("criatura_editar.php", { id, ...campos }); }
+export async function eliminarCriatura(id) { return post("criatura_eliminar.php", { id }); }
+export async function fetchAlbumConfig() { return llamarAPI("album_config_get.php"); }
+export async function guardarAlbumConfig(campos) { return post("album_config_guardar.php", campos); }
+export async function fetchColeccion(estudianteId) { return llamarAPI(`coleccion_list.php?estudiante_id=${estudianteId}`); }
+export async function abrirSobre(estudianteId) { return post("abrir_sobre.php", { estudiante_id: estudianteId }); }
+export async function fetchCriaturasDuplicadas() { return llamarAPI("criaturas_duplicadas.php"); }
+export async function fusionarCriaturasDuplicadas(idConservar, idsEliminar) { return post("criaturas_fusionar.php", { id_conservar: idConservar, ids_eliminar: idsEliminar }); }
+export async function limpiarTodosLosDuplicadosCriaturas() { return post("criaturas_limpiar_todos_duplicados.php", {}); }
+
+/* ==================== GAMIFICACIÓN EXTRA ==================== */
+export async function fetchCosmeticosCatalogo() { return llamarAPI("cosmeticos_catalogo_list.php"); }
+export async function crearCosmetico(campos) { return post("cosmetico_crear.php", campos); }
+export async function editarCosmetico(id, campos) { return post("cosmetico_editar.php", { id, ...campos }); }
+export async function eliminarCosmetico(id) { return post("cosmetico_eliminar.php", { id }); }
+export async function fetchCosmeticosDuplicados() { return llamarAPI("cosmeticos_duplicados.php"); }
+export async function fusionarCosmeticosDuplicados(idConservar, idsEliminar) { return post("cosmeticos_fusionar.php", { id_conservar: idConservar, ids_eliminar: idsEliminar }); }
+export async function limpiarTodosLosDuplicadosCosmeticos() { return post("cosmeticos_limpiar_todos_duplicados.php", {}); }
+export async function fetchDesafiosReino(gradoId) { return llamarAPI(`desafios_reino_list.php?grado_id=${encodeURIComponent(gradoId)}`); }
+export async function crearDesafioReino(campos) { return post("desafio_reino_crear.php", campos); }
+export async function eliminarDesafioReino(id) { return post("desafio_reino_eliminar.php", { id }); }
+export async function fetchProgresoDesafio(desafio) { return llamarAPI(`progreso_desafio_get.php?desafio_id=${desafio.id}`); }
+export async function fetchMicroMisiones() { return llamarAPI("micro_misiones_list.php"); }
+export async function crearMicroMision(campos) { return post("micro_mision_crear.php", campos); }
+export async function editarMicroMision(id, campos) { return post("micro_mision_editar.php", { id, ...campos }); }
+export async function eliminarMicroMision(id) { return post("micro_mision_eliminar.php", { id }); }
+
+/* ==================== SALÓN DE HONOR / BAJAS DE VIDA / HISTORIAL ==================== */
+export async function fetchSalonDeHonor() { return llamarAPI("salon_honor_get.php"); }
+export async function fetchEstudiantesConBajasVida() { return llamarAPI("estudiantes_bajas_vida.php"); }
+export async function fetchHistorialGamificacion(estudianteId) { return llamarAPI(`historial_gamificacion_list.php?estudiante_id=${estudianteId}`); }
+
+/* ==================== REPORTES ==================== */
+export async function fetchReporteAccesos(gradoId) { return llamarAPI(`reporte_accesos.php?grado_id=${encodeURIComponent(gradoId)}`); }
+export async function fetchNotasFinalesTransversal(gradoId, periodo) { const p = periodo ? `&periodo=${periodo}` : ""; return llamarAPI(`notas_finales_transversal.php?grado_id=${encodeURIComponent(gradoId)}${p}`); }
+export async function crearActaNivelacionSiReprobado(materiaId, materiaNombre, estudianteId, periodo, nota, config) { return post("acta_nivelacion_crear_si_reprobado.php", { materia_id: materiaId, materia_nombre: materiaNombre, estudiante_id: estudianteId, periodo, nota, config }); }
+export async function fetchActasPorEstudiante(estudianteId) { return llamarAPI(`actas_por_estudiante.php?estudiante_id=${estudianteId}`); }
+
+/* ==================== DIPLOMAS ==================== */
+export async function fetchMiPerfil() { return llamarAPI("mi_perfil_get.php"); }
+export async function guardarMiNombre(nombre) { return post("mi_nombre_guardar.php", { nombre }); }
+export async function fetchAsignaturasDiploma() { return llamarAPI("asignaturas_diploma_list.php"); }
+export async function crearAsignaturaDiploma(nombre, pilares) { return post("asignatura_diploma_crear.php", { nombre, pilares }); }
+export async function eliminarAsignaturaDiploma(id) { return post("asignatura_diploma_eliminar.php", { id }); }
+
+/* ==================== ANUNCIOS ==================== */
+export async function fetchAnuncios() { return llamarAPI("anuncios_list.php"); }
+export async function crearAnuncio(campos) { return post("anuncio_crear.php", campos); }
+export async function editarAnuncio(id, campos) { return post("anuncio_editar.php", { id, ...campos }); }
+export async function eliminarAnuncio(id) { return post("anuncio_eliminar.php", { id }); }
+
+/* ==================== BIBLIOTECA ==================== */
+export async function fetchBibliotecaRecursos() { return llamarAPI("biblioteca_recursos_list.php"); }
+export async function crearRecursoBiblioteca(campos) { return post("recurso_biblioteca_crear.php", campos); }
+export async function editarRecursoBiblioteca(id, campos) { return post("recurso_biblioteca_editar.php", { id, ...campos }); }
+export async function eliminarRecursoBiblioteca(id) { return post("recurso_biblioteca_eliminar.php", { id }); }
+
+/* ==================== HORARIO / CRONOGRAMA ==================== */
+export async function fetchHorario() { return llamarAPI("horario_list.php"); }
+export async function crearHorario(campos) { return post("horario_crear.php", campos); }
+export async function editarHorario(id, campos) { return post("horario_editar.php", { id, ...campos }); }
+export async function eliminarHorario(id) { return post("horario_eliminar.php", { id }); }
+export async function fetchCronograma() { return llamarAPI("cronograma_list.php"); }
+export async function crearEventoCronograma(campos) { return post("evento_cronograma_crear.php", campos); }
+export async function eliminarEventoCronograma(id) { return post("evento_cronograma_eliminar.php", { id }); }
+
+/* ==================== CORREGIR NOMBRES ==================== */
+export async function fetchTodosLosEstudiantesActivos() { return llamarAPI("todos_los_estudiantes_activos.php"); }
+export async function editarNombreEstudiante(id, nombre) { return post("estudiante_editar_nombre.php", { id, nombre }); }
+export async function guardarApellidos(id, apellidos) { return post("estudiante_guardar_apellidos.php", { id, apellidos }); }
+
+/* ==================== DIRECCIÓN DE CURSO ==================== */
+export async function fetchOCrearMateriaDireccionCurso() { return llamarAPI("materia_direccion_curso_get_o_crear.php"); }
+export async function fetchAsistenciaDetalladaCurso(gradoId, desde, hasta) { return llamarAPI(`asistencia_detallada_curso.php?grado_id=${encodeURIComponent(gradoId)}&desde=${desde}&hasta=${hasta}`); }
+export async function limpiarYMigrarAsistenciaGeneral(gradoId) { return post("limpiar_y_migrar_asistencia_general.php", { grado_id: gradoId }); }
+export async function moverAsistenciaGeneralAMateria(gradoId, materiaId, desde, hasta) { return post("mover_asistencia_general_a_materia.php", { grado_id: gradoId, materia_id: materiaId, desde, hasta }); }
+export async function fetchTotalesAsistenciaInstitucionalCurso(gradoId, desde, hasta, materiaDCId) { return llamarAPI(`totales_asistencia_institucional_curso.php?grado_id=${encodeURIComponent(gradoId)}&desde=${desde}&hasta=${hasta}&materia_dc_id=${materiaDCId}`); }
+
+/* ==================== ENTREGAS POR REVISAR ==================== */
+export async function fetchResumenEntregasPorRevisar() { return llamarAPI("resumen_entregas_por_revisar.php"); }
+
 /* ====================================================================
-   PENDIENTE — funciones que tus pantallas usan pero todavía NO existen
-   en PHP (van a tirar error si las tocás). Corresponden a áreas que
-   todavía no migramos: Álbum, Anuncios, Logros, Salón de Honor,
-   Diplomas, Gamificación Extra, Historial de Puntos, Personaje,
-   Dirección de Curso, Reportes, Horario, Biblioteca, Anotaciones,
-   Bajas de Vida, Corregir Nombres, Entregas por Revisar, y varias
-   funciones secundarias de Estudiantes (cambiarReino, renombrar,
-   subir foto, generar código, roles de aula avanzados) y de
-   Calificaciones (nivelación, comentarios de desempeño automáticos,
-   copiar planilla entre cursos).
+   PENDIENTE — lo poco que queda sin migrar. Si tocás algo de esto, va a
+   tirar error "no es una función":
+   - Anotaciones (Observador de convivencia) — no se armó ningún módulo
+     para esto en toda la migración; falta desde cero.
+   - Funciones secundarias de Estudiantes: cambiarReino, renombrar (el
+     nombre "de un tirón", separado de Corregir Nombres), subir foto,
+     generar código de acceso nuevo.
+   - Calificaciones: nivelación por actividad puntual (aparte de las
+     actas), comentarios de desempeño automáticos, copiar planilla
+     completa entre cursos.
+   - El Portal del estudiante como pantalla unificada: cada pieza ya
+     tiene su función en este archivo, pero falta revisar App.jsx del
+     lado del estudiante para confirmar que todas estén conectadas
+     igual que del lado del docente.
    ==================================================================== */
