@@ -25,6 +25,7 @@ export async function fetchUsuarioActualId() { const yo = await whoamiProfesor()
 
 /* ==================== GRADOS / REINOS ==================== */
 export async function fetchGrados() { return llamarAPI("grados_list.php"); }
+export async function asegurarGradosBase() { return post("asegurar_grados_base.php", {}); }
 export async function crearGrado(id) { return post("grado_crear.php", { id }); }
 export async function eliminarGrado(gradoId) { return post("grado_eliminar.php", { grado_id: gradoId }); }
 export async function guardarColorGrado(gradoId, color) { return post("grado_guardar_color.php", { grado_id: gradoId, color }); }
