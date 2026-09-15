@@ -25,6 +25,10 @@ export async function fetchUsuarioActualId() { const yo = await whoamiProfesor()
 
 /* ==================== GRADOS / REINOS ==================== */
 export async function fetchGrados() { return llamarAPI("grados_list.php"); }
+export async function crearGrado(id) { return post("grado_crear.php", { id }); }
+export async function eliminarGrado(gradoId) { return post("grado_eliminar.php", { grado_id: gradoId }); }
+export async function guardarColorGrado(gradoId, color) { return post("grado_guardar_color.php", { grado_id: gradoId, color }); }
+export async function guardarOcultoGrado(gradoId, oculto) { return post("grado_guardar_oculto.php", { grado_id: gradoId, oculto }); }
 // Catálogo de Reinos: todavía no migrado — devuelve vacío para no romper
 // las tarjetas (usan un color por defecto cuando no encuentran el reino).
 export async function fetchReinos() { return []; }
