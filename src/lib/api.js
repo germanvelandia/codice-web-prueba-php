@@ -328,6 +328,29 @@ export async function calificarEntradaCodice(entrada, estudianteId, gradoId, val
 export async function fetchStatsDocente() { return llamarAPI("stats_docente_get.php"); }
 export async function fetchResumenDocente() { return llamarAPI("resumen_docente_get.php"); }
 export async function fetchClasesPendientesDeHoy(pares) { return post("clases_pendientes_de_hoy.php", { pares }); }
+
+/* ==================== PORTAL DEL ESTUDIANTE — piezas que faltaban ==================== */
+export async function buscarEstudiantesGlobal(query) { return llamarAPI(`buscar_estudiantes_global.php?q=${encodeURIComponent(query)}`); }
+// OJO: es el mismo endpoint que consultarPortalEstudiante — la app real usa este nombre.
+export async function fetchEstudiantePorCodigo(codigo) { return llamarAPI(`estudiante_login.php?codigo=${encodeURIComponent(codigo)}`); }
+export async function registrarAcceso(estudianteId) { return post("registrar_acceso.php", { estudiante_id: estudianteId }); }
+export async function fetchMiRol(estudianteId) { return llamarAPI(`mi_rol_get.php?estudiante_id=${estudianteId}`); }
+export async function fetchNotasEstudiante(estudianteId) { return llamarAPI(`notas_estudiante_list.php?estudiante_id=${estudianteId}`); }
+export async function fetchComentariosDesempeno() { return llamarAPI("comentarios_desempeno_list.php"); }
+export async function fetchMisIntentos(evaluacionId, estudianteId) { return llamarAPI(`mis_intentos_list.php?evaluacion_id=${evaluacionId}&estudiante_id=${estudianteId}`); }
+export async function fetchTareasCalificablesEstudiante(gradoId, tipo) { return llamarAPI(`tareas_calificables_estudiante.php?grado_id=${encodeURIComponent(gradoId)}&tipo=${tipo}`); }
+export async function fetchMiEntrega(tareaId, estudianteId) { return llamarAPI(`mi_entrega_get.php?tarea_id=${tareaId}&estudiante_id=${estudianteId}`); }
+export async function fetchTareasPlaneacionParaGrado(gradoId) { return llamarAPI(`tareas_planeacion_grado.php?grado_id=${encodeURIComponent(gradoId)}`); }
+export async function fetchRankingGrado(gradoId) { return llamarAPI(`ranking_grado.php?grado_id=${encodeURIComponent(gradoId)}`); }
+export async function fetchAnunciosParaGrado(gradoId) { return llamarAPI(`anuncios_grado.php?grado_id=${encodeURIComponent(gradoId)}`); }
+export async function fetchBibliotecaPorNivel(nivel) { return llamarAPI(`biblioteca_nivel.php?nivel=${nivel}`); }
+export async function fetchAvatarConfigsMultiples(ids) { if (!ids?.length) return []; return llamarAPI(`avatar_configs_multiples.php?estudiante_ids=${ids.join(",")}`); }
+export async function fetchCosmeticosEstudiante(estudianteId) { return llamarAPI(`cosmeticos_estudiante_list.php?estudiante_id=${estudianteId}`); }
+export async function fetchEquipadosEstudiante(estudianteId) { return llamarAPI(`equipados_estudiante.php?estudiante_id=${estudianteId}`); }
+export async function comprarCosmetico(estudianteId, cosmetico) { return post("cosmetico_comprar.php", { estudiante_id: estudianteId, cosmetico_id: cosmetico.id }); }
+export async function equiparCosmetico(estudianteId, tipo, cosmeticoId) { return post("cosmetico_equipar.php", { estudiante_id: estudianteId, tipo, cosmetico_id: cosmeticoId }); }
+export async function fetchMicroMisionesEstudiante(estudianteId) { return llamarAPI(`micromisiones_estudiante.php?estudiante_id=${estudianteId}`); }
+export async function completarMicroMision(mision, estudianteId) { return post("micromision_completar.php", { mision, estudiante_id: estudianteId }); }
 export async function fetchAsignaturasDiploma() { return llamarAPI("asignaturas_diploma_list.php"); }
 export async function crearAsignaturaDiploma(nombre, pilares) { return post("asignatura_diploma_crear.php", { nombre, pilares }); }
 export async function eliminarAsignaturaDiploma(id) { return post("asignatura_diploma_eliminar.php", { id }); }
